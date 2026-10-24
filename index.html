@@ -45,9 +45,9 @@
 
             <div class="flex items-center space-x-4">
                 <!-- Status Badge -->
-                <div id="supabase-status" class="hidden items-center space-x-1.5 text-xs font-medium px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>Ligado ao Supabase</span>
+                <div id="estado-ligacao" class="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-amber-200">
+                    <span class="h-1.5 w-1.5 rounded-full bg-current"></span>
+                    <span>A verificar ligação...</span>
                 </div>
 
                 <!-- Dark Mode Toggle Button -->
@@ -80,17 +80,17 @@
             <form id="form-ponto" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium mb-1">Nome do local</label>
-                    <input type="text" id="nome" required placeholder="Ex: Campus ADS — Bloco B" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition">
+                    <input type="text" name="nome_local" id="nome_local" required placeholder="Ex: Campus ADS — Bloco B" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium mb-1">Endereço</label>
-                    <input type="text" id="endereco" required placeholder="Rua, número, cidade" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition">
+                    <input type="text" name="endereco" id="endereco" required placeholder="Rua, número, cidade" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium mb-1">Tipo de material aceite</label>
-                    <select id="tipo_material" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition">
+                    <select name="tipo_material" id="tipo_material" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition">
                         <option value="">Selecione o tipo de material</option>
                         <option value="Computadores e portáteis">Computadores e portáteis</option>
                         <option value="Smartphones e telemóveis">Smartphones e telemóveis</option>
@@ -100,11 +100,11 @@
                     </select>
                 </div>
 
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition duration-200">
+                <button type="submit" id="btn-submeter" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition duration-200">
                     Cadastrar ponto de recolha
                 </button>
             </form>
-            <div id="mensagem-status" class="mt-4 text-center text-sm font-medium hidden"></div>
+            <div id="feedback" class="hidden"></div>
         </div>
 
         <!-- Lista de Pontos Cadastrados -->
@@ -125,9 +125,10 @@
                     </tbody>
                 </table>
             </div>
+            <div id="estado-vazio" class="hidden text-center py-6 text-sm text-slate-500">Nenhum ponto registado ainda.</div>
         </div>
 
-        <!-- SECÇÃO DE RESULTADOS DA PESQUISA (Corrigida e Detalhada) -->
+        <!-- SECÇÃO DE RESULTADOS DA PESQUISA -->
         <section class="reveal bg-white dark:bg-slate-800 shadow-xl rounded-2xl p-6 md:p-8 border border-slate-100 dark:border-slate-700 space-y-6">
             <div class="text-center">
                 <span class="text-xs font-semibold tracking-wider text-emerald-600 dark:text-emerald-400 uppercase">Pesquisa de Campo</span>
