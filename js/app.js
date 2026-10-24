@@ -23,17 +23,17 @@
       local: {
         label: "Modo local (localStorage)",
         className:
-          "inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800 ring-1 ring-amber-200",
+          "inline-flex items-center gap-2 rounded-full bg-amber-50 dark:bg-amber-950/50 px-3 py-1 text-xs font-medium text-amber-800 dark:text-amber-400 ring-1 ring-amber-200 dark:ring-amber-800",
       },
       supabase: {
         label: "Ligado ao Supabase",
         className:
-          "inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-800 ring-1 ring-emerald-200",
+          "inline-flex items-center gap-2 rounded-full bg-emerald-50 dark:bg-emerald-950/50 px-3 py-1 text-xs font-medium text-emerald-800 dark:text-emerald-400 ring-1 ring-emerald-200 dark:ring-emerald-800",
       },
       erro: {
         label: "Falha ao ligar ao Supabase — a usar modo local",
         className:
-          "inline-flex items-center gap-2 rounded-full bg-rose-50 px-3 py-1 text-xs font-medium text-rose-800 ring-1 ring-rose-200",
+          "inline-flex items-center gap-2 rounded-full bg-rose-50 dark:bg-rose-950/50 px-3 py-1 text-xs font-medium text-rose-800 dark:text-rose-400 ring-1 ring-rose-200 dark:ring-rose-800",
       },
     };
 
@@ -49,9 +49,9 @@
   function showFeedback(message, type) {
     if (!feedback) return;
     const palette = {
-      success: "bg-emerald-50 text-emerald-800 ring-emerald-200",
-      error: "bg-rose-50 text-rose-800 ring-rose-200",
-      info: "bg-sky-50 text-sky-800 ring-sky-200",
+      success: "bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 ring-emerald-200 dark:ring-emerald-800",
+      error: "bg-rose-50 dark:bg-rose-950/50 text-rose-800 dark:text-rose-300 ring-rose-200 dark:ring-rose-800",
+      info: "bg-sky-50 dark:bg-sky-950/50 text-sky-800 dark:text-sky-300 ring-sky-200 dark:ring-sky-800",
     };
 
     feedback.className =
@@ -106,19 +106,19 @@
 
     pontos.forEach(function (ponto) {
       const tr = document.createElement("tr");
-      tr.className = "border-b border-stone-100 last:border-0";
+      tr.className = "border-b border-slate-100 dark:border-slate-700 last:border-0";
       tr.innerHTML =
-        "<td class=\"px-4 py-3 font-medium text-stone-800\">" +
+        "<td class=\"px-4 py-3 font-medium text-slate-800 dark:text-slate-100\">" +
         escapeHtml(ponto.nome_local) +
         "</td>" +
-        "<td class=\"px-4 py-3 text-stone-600\">" +
+        "<td class=\"px-4 py-3 text-slate-600 dark:text-slate-300\">" +
         escapeHtml(ponto.endereco) +
         "</td>" +
         "<td class=\"px-4 py-3\">" +
-        '<span class="inline-flex rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-800">' +
+        '<span class="inline-flex rounded-full bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 text-xs font-medium text-emerald-800 dark:text-emerald-400 ring-1 ring-emerald-200 dark:ring-emerald-800">' +
         escapeHtml(ponto.tipo_material) +
         "</span></td>" +
-        "<td class=\"px-4 py-3 text-sm text-stone-500\">" +
+        "<td class=\"px-4 py-3 text-sm text-slate-500 dark:text-slate-400\">" +
         formatDate(ponto.created_at) +
         "</td>";
       tbody.appendChild(tr);
