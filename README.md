@@ -9,7 +9,7 @@
 
 ## 🔗 Links do Projeto
 
--  **Aplicação Online (Netlify):** [Aceder ao EcoDescarte](https://ecodescarte-ods12.netlify.app/)
+-  **Aplicação Online (Netlify):** [EcoDescarte](https://ecodescarte-ods12.netlify.app/)
 -  **Repositório GitHub:** [GitHub - EcoDescarte](https://github.com/lzCrossz/Projeto_EcoDescarte-ODS-12)
 
 ---
