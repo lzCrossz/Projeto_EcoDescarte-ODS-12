@@ -38,13 +38,16 @@
     };
 
     const current = styles[mode] || styles.local;
-    statusBadge.className = current.className;
-    statusBadge.innerHTML =
-      '<span class="h-1.5 w-1.5 rounded-full bg-current"></span>' +
-      current.label;
+    if (statusBadge) {
+      statusBadge.className = current.className;
+      statusBadge.innerHTML =
+        '<span class="h-1.5 w-1.5 rounded-full bg-current"></span>' +
+        current.label;
+    }
   }
 
   function showFeedback(message, type) {
+    if (!feedback) return;
     const palette = {
       success: "bg-emerald-50 text-emerald-800 ring-emerald-200",
       error: "bg-rose-50 text-rose-800 ring-rose-200",
@@ -59,7 +62,9 @@
   }
 
   function hideFeedback() {
-    feedback.classList.add("hidden");
+    if (feedback) {
+      feedback.classList.add("hidden");
+    }
   }
 
   function readLocal() {
@@ -89,14 +94,15 @@
   }
 
   function renderTable(pontos) {
+    if (!tbody) return;
     tbody.innerHTML = "";
 
-    if (!pontos.length) {
-      emptyState.classList.remove("hidden");
+    if (!pontos || !pontos.length) {
+      if (emptyState) emptyState.classList.remove("hidden");
       return;
     }
 
-    emptyState.classList.add("hidden");
+    if (emptyState) emptyState.classList.add("hidden");
 
     pontos.forEach(function (ponto) {
       const tr = document.createElement("tr");
@@ -128,7 +134,7 @@
   }
 
   async function listPontos() {
-    if (usingSupabase) {
+    if (usingSupabase && supabaseClient) {
       const { data, error } = await supabaseClient
         .from(TABLE)
         .select("id, nome_local, endereco, tipo_material, created_at")
@@ -144,7 +150,7 @@
   }
 
   async function createPonto(payload) {
-    if (usingSupabase) {
+    if (usingSupabase && supabaseClient) {
       const { data, error } = await supabaseClient
         .from(TABLE)
         .insert(payload)
@@ -156,7 +162,7 @@
     }
 
     const ponto = {
-      id: crypto.randomUUID(),
+      id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2),
       created_at: new Date().toISOString(),
       ...payload,
     };
@@ -167,8 +173,12 @@
   }
 
   async function refresh() {
-    const pontos = await listPontos();
-    renderTable(pontos);
+    try {
+      const pontos = await listPontos();
+      renderTable(pontos);
+    } catch (error) {
+      console.error("Erro ao atualizar pontos:", error);
+    }
   }
 
   async function initSupabase() {
@@ -205,40 +215,46 @@
     }
   }
 
-  form.addEventListener("submit", async function (event) {
-    event.preventDefault();
-    hideFeedback();
+  if (form) {
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      hideFeedback();
 
-    const formData = new FormData(form);
-    const payload = {
-      nome_local: String(formData.get("nome_local") || "").trim(),
-      endereco: String(formData.get("endereco") || "").trim(),
-      tipo_material: String(formData.get("tipo_material") || "").trim(),
-    };
+      const formData = new FormData(form);
+      const payload = {
+        nome_local: String(formData.get("nome_local") || "").trim(),
+        endereco: String(formData.get("endereco") || "").trim(),
+        tipo_material: String(formData.get("tipo_material") || "").trim(),
+      };
 
-    if (!payload.nome_local || !payload.endereco || !payload.tipo_material) {
-      showFeedback("Preencha todos os campos antes de cadastrar.", "error");
-      return;
-    }
+      if (!payload.nome_local || !payload.endereco || !payload.tipo_material) {
+        showFeedback("Preencha todos os campos antes de cadastrar.", "error");
+        return;
+      }
 
-    btnSubmit.disabled = true;
-    btnSubmit.textContent = "A guardar…";
+      if (btnSubmit) {
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = "A guardar…";
+      }
 
-    try {
-      await createPonto(payload);
-      form.reset();
-      await refresh();
-      showFeedback("Ponto de recolha cadastrado com sucesso.", "success");
-    } catch (error) {
-      showFeedback(
-        "Não foi possível guardar o ponto. " + (error.message || ""),
-        "error"
-      );
-    } finally {
-      btnSubmit.disabled = false;
-      btnSubmit.textContent = "Cadastrar ponto";
-    }
-  });
+      try {
+        await createPonto(payload);
+        form.reset();
+        await refresh();
+        showFeedback("Ponto de recolha cadastrado com sucesso.", "success");
+      } catch (error) {
+        showFeedback(
+          "Não foi possível guardar o ponto. " + (error.message || ""),
+          "error"
+        );
+      } finally {
+        if (btnSubmit) {
+          btnSubmit.disabled = false;
+          btnSubmit.textContent = "Cadastrar ponto";
+        }
+      }
+    });
+  }
 
   initSupabase()
     .then(refresh)
